@@ -25,8 +25,13 @@ def F(x, y):
 
 # 得到最大适应度
 def get_fitness(pop):
+    """
+    种群所有元素减去最小的
+    :param pop:种群
+    :return: 返回适应度
+    """
     x, y = translateDNA(pop)
-    pred = F(x, y)
+    pred = F(x, y)  # 计算这个基因对应的F值
     return (pred - np.min(pred)) + 1e-3
 
 
@@ -38,16 +43,13 @@ def translateDNA(pop):
     '''
     x_pop = pop[:, 1::2]  # pop中的奇数列表示x
     y_pop = pop[:, 0::2]  # pop中的偶数列表示y
-    x = x_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (X_BOUND[1] - X_BOUND[0]) + X_BOUND[0]
-    y = y_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (Y_BOUND[1] - Y_BOUND[0]) + Y_BOUND[0]
+    x = x_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (X_BOUND[1] - X_BOUND[0]) + X_BOUND[0]  # 计算基因对应的x值
+    y = y_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (Y_BOUND[1] - Y_BOUND[0]) + Y_BOUND[0]  # 计算基因对应的y值
     return x, y
 
 
-# population_matrix = np.random.randint(2, size=(POP_SIZE, DNA_SIZE * 2))
-# print(len(translateDNA(population_matrix)[0]))
-
 # 交叉、变异
-def crossover_and_mutation(pop, CROSSVER_RATE=0.8):
+def crossover_and_mutation(pop, CROSSVER_RATE=0.8):  # 计算交叉，变异基因
     new_pop = []
     for father in pop:  # 遍历种群中的每一个个体，将该个体作为父亲
         child = father  # 孩子先得到父亲的全部基因（代表一个个体的一个二进制0，1串）
@@ -60,7 +62,7 @@ def crossover_and_mutation(pop, CROSSVER_RATE=0.8):
     return new_pop
 
 
-def mutation(child, MUTATION_RATE=0.1):
+def mutation(child, MUTATION_RATE=0.1):  # 计算变异基因
     if np.random.rand() < MUTATION_RATE:
         mutate_points = np.random.randint(0, DNA_SIZE * 2)  # 随机产生一个实数，代表要变异基因的位置
         child[mutate_points] = child[mutate_points] ^ 1  # 将变异点位置的二进制反转
@@ -71,7 +73,7 @@ def select(pop, fitness):  # 自然选择，优胜劣汰
     return pop[idx]
 
 
-def print_info(pop):
+def print_info(pop):  # 输出
     fitness = get_fitness(pop)
     max_fitness_index = np.argmax(fitness)
     # print('此时种群',pop)
@@ -92,4 +94,3 @@ if __name__ == '__main__':
         if i % 100 == 0:
             print('第%s次迭代:' % i)
             print_info(pop)
-        # print_info(pop)
