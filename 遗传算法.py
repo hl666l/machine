@@ -10,7 +10,7 @@ import numpy as np
 
 DNA_SIZE = 8  # 基因个数
 POP_SIZE = 200  # 种群个体个数
-CROSSVER_RATE = 0.9  # 交叉点
+CROSSVER_RATE = 0.9  # 交叉概率
 MUTATION_RATE = 0.01  # 突变率
 N_GENERATIONS = 5000  # 迭代次数
 X_BOUND = [-3, 3]  # x的取值范围
